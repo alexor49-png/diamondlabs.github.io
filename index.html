@@ -1,1 +1,433 @@
-index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diamond Labs</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  :root {
+    --ice: #E8F4F8;
+    --ice-mid: #B8D8E8;
+    --steel: #1A2C3D;
+    --steel-light: #2D4A62;
+    --crystal: #5BA4CF;
+    --crystal-bright: #7EC8E3;
+    --white: #FAFCFD;
+    --muted: #6B8499;
+    --accent: #00C9B1;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--steel);
+    color: var(--white);
+    overflow-x: hidden;
+  }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 3rem;
+    background: rgba(26, 44, 61, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(91, 164, 207, 0.2);
+  }
+
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 1.1rem; font-weight: 500; letter-spacing: 0.08em;
+    color: var(--crystal-bright);
+    text-decoration: none;
+  }
+
+  .nav-logo svg { width: 28px; height: 28px; }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.85rem; font-weight: 400; letter-spacing: 0.06em;
+    color: var(--ice-mid); text-decoration: none; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--crystal-bright); }
+
+  .nav-cta {
+    font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--steel) !important;
+    background: var(--accent);
+    padding: 0.5rem 1.2rem;
+    border-radius: 3px;
+  }
+  .nav-cta:hover { background: #00e0c6; color: var(--steel) !important; }
+
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+    padding: 0 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 80% 50%, rgba(91, 164, 207, 0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 10% 80%, rgba(0, 201, 177, 0.06) 0%, transparent 60%);
+  }
+
+  .hero-grid {
+    position: absolute; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(91,164,207,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(91,164,207,0.05) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .hero-diamond {
+    position: absolute; right: 8%; top: 50%; transform: translateY(-50%);
+    z-index: 0; opacity: 0.18;
+  }
+
+  .hero-content { position: relative; z-index: 1; max-width: 700px; }
+
+  .hero-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .hero-label::before {
+    content: ''; display: block;
+    width: 32px; height: 1px; background: var(--accent);
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    line-height: 1.05;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+  }
+
+  h1 em { font-style: italic; color: var(--crystal-bright); }
+
+  .hero-sub {
+    font-size: 1.05rem; font-weight: 300; line-height: 1.7;
+    color: var(--ice-mid);
+    max-width: 520px; margin-bottom: 2.5rem;
+  }
+
+  .hero-actions { display: flex; gap: 1rem; align-items: center; }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--accent); color: var(--steel);
+    padding: 0.85rem 2rem; border-radius: 3px;
+    font-size: 0.85rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+    text-decoration: none; transition: all 0.2s;
+  }
+  .btn-primary:hover { background: #00e0c6; transform: translateY(-1px); }
+
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    border: 1px solid rgba(91,164,207,0.4); color: var(--crystal-bright);
+    padding: 0.85rem 2rem; border-radius: 3px;
+    font-size: 0.85rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
+    text-decoration: none; transition: all 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--crystal-bright); background: rgba(91,164,207,0.08); }
+
+  .stats-bar {
+    background: rgba(255,255,255,0.04);
+    border-top: 1px solid rgba(91,164,207,0.15);
+    border-bottom: 1px solid rgba(91,164,207,0.15);
+    padding: 1.5rem 3rem;
+    display: flex; gap: 3rem; flex-wrap: wrap;
+  }
+
+  .stat { display: flex; flex-direction: column; gap: 0.25rem; }
+  .stat-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 1.8rem; font-weight: 500;
+    color: var(--crystal-bright);
+  }
+  .stat-label {
+    font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  section { padding: 5rem 3rem; }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 0.75rem;
+  }
+
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin-bottom: 3rem;
+    color: var(--white);
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5px;
+    background: rgba(91,164,207,0.15);
+    border: 1px solid rgba(91,164,207,0.15);
+  }
+
+  .product-card {
+    background: var(--steel);
+    padding: 2rem;
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+  .product-card:hover { background: var(--steel-light); }
+
+  .product-tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(0,201,177,0.3);
+    padding: 0.2rem 0.6rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .product-name {
+    font-size: 1.1rem; font-weight: 500;
+    color: var(--white); margin-bottom: 0.5rem;
+  }
+
+  .product-formula {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem; color: var(--crystal-bright);
+    margin-bottom: 1rem;
+  }
+
+  .product-desc {
+    font-size: 0.85rem; line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .why-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+  }
+
+  .why-card {
+    padding: 2rem;
+    border: 1px solid rgba(91,164,207,0.15);
+    border-radius: 2px;
+    position: relative;
+  }
+  .why-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+  }
+
+  .why-icon { font-size: 1.5rem; margin-bottom: 1rem; }
+  .why-title { font-weight: 500; margin-bottom: 0.5rem; font-size: 0.95rem; }
+  .why-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
+
+  .cta-section {
+    background: rgba(91,164,207,0.06);
+    border-top: 1px solid rgba(91,164,207,0.2);
+    border-bottom: 1px solid rgba(91,164,207,0.2);
+    text-align: center;
+  }
+  .cta-section h2 { margin-bottom: 1rem; }
+  .cta-sub { color: var(--ice-mid); font-size: 0.95rem; max-width: 500px; margin: 0 auto 2.5rem; }
+
+  footer {
+    padding: 2.5rem 3rem;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+    border-top: 1px solid rgba(91,164,207,0.12);
+    font-size: 0.78rem; color: var(--muted);
+  }
+
+  .footer-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem; color: var(--crystal-bright); letter-spacing: 0.08em;
+  }
+
+  .disclaimer {
+    font-size: 0.7rem; color: var(--muted); opacity: 0.6;
+    max-width: 600px; line-height: 1.5;
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero, section, .stats-bar { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .stats-bar { gap: 1.5rem; }
+    footer { padding: 2rem 1.5rem; flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">
+    <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="14,2 26,10 26,18 14,26 2,18 2,10" stroke="#7EC8E3" stroke-width="1.5" fill="none"/>
+      <polygon points="14,7 21,11.5 21,16.5 14,21 7,16.5 7,11.5" stroke="#00C9B1" stroke-width="1" fill="rgba(0,201,177,0.08)"/>
+      <line x1="14" y1="2" x2="14" y2="26" stroke="#7EC8E3" stroke-width="0.75" stroke-dasharray="2,3"/>
+      <line x1="2" y1="10" x2="26" y2="18" stroke="#7EC8E3" stroke-width="0.75" stroke-dasharray="2,3"/>
+      <line x1="2" y1="18" x2="26" y2="10" stroke="#7EC8E3" stroke-width="0.75" stroke-dasharray="2,3"/>
+    </svg>
+    DIAMOND LABS
+  </a>
+  <ul class="nav-links">
+    <li><a href="#">Catalogue</a></li>
+    <li><a href="#">Peptides</a></li>
+    <li><a href="#">Research</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#" class="nav-cta">Order Now</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <svg class="hero-diamond" viewBox="0 0 400 400" width="500" height="500" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="200,20 380,130 380,270 200,380 20,270 20,130" stroke="#7EC8E3" stroke-width="1"/>
+    <polygon points="200,60 340,145 340,255 200,340 60,255 60,145" stroke="#7EC8E3" stroke-width="0.5"/>
+    <polygon points="200,100 300,160 300,240 200,300 100,240 100,160" stroke="#00C9B1" stroke-width="0.5"/>
+    <line x1="200" y1="20" x2="200" y2="380" stroke="#5BA4CF" stroke-width="0.4"/>
+    <line x1="20" y1="130" x2="380" y2="270" stroke="#5BA4CF" stroke-width="0.4"/>
+    <line x1="20" y1="270" x2="380" y2="130" stroke="#5BA4CF" stroke-width="0.4"/>
+    <line x1="20" y1="200" x2="380" y2="200" stroke="#5BA4CF" stroke-width="0.3" stroke-dasharray="4,6"/>
+    <line x1="200" y1="20" x2="380" y2="270" stroke="#5BA4CF" stroke-width="0.3"/>
+    <line x1="200" y1="20" x2="20" y2="270" stroke="#5BA4CF" stroke-width="0.3"/>
+    <circle cx="200" cy="200" r="4" fill="#00C9B1" opacity="0.6"/>
+  </svg>
+
+  <div class="hero-content">
+    <div class="hero-label">Research Grade · Verified Purity</div>
+    <h1>Precision<br>compounds for<br><em>serious research</em></h1>
+    <p class="hero-sub">Diamond Labs supplies high-purity research chemicals and peptides to laboratories worldwide. Rigorous QC, COA on every batch.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">View Catalogue →</a>
+      <a href="#" class="btn-outline">Download COA</a>
+    </div>
+  </div>
+</section>
+
+<div class="stats-bar">
+  <div class="stat">
+    <span class="stat-num">99.8%</span>
+    <span class="stat-label">Average Purity</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">500+</span>
+    <span class="stat-label">Compounds Available</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">72h</span>
+    <span class="stat-label">Dispatch Time</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">ISO</span>
+    <span class="stat-label">Certified Facility</span>
+  </div>
+</div>
+
+<section>
+  <div class="section-label">Product Catalogue</div>
+  <h2>Featured compounds</h2>
+  <div class="product-grid">
+    <div class="product-card">
+      <div class="product-tag">Peptide</div>
+      <div class="product-name">BPC-157</div>
+      <div class="product-formula">C62H98N16O22</div>
+      <p class="product-desc">Body Protection Compound. 5mg & 10mg vials. ≥99% purity verified by HPLC. Research use only.</p>
+    </div>
+    <div class="product-card">
+      <div class="product-tag">Peptide</div>
+      <div class="product-name">Ipamorelin</div>
+      <div class="product-formula">C38H49N9O5</div>
+      <p class="product-desc">Selective GH secretagogue pentapeptide. 2mg & 5mg lyophilised. Certificate of analysis included.</p>
+    </div>
+    <div class="product-card">
+      <div class="product-tag">Peptide</div>
+      <div class="product-name">TB-500</div>
+      <div class="product-formula">C212H350N56O78S</div>
+      <p class="product-desc">Thymosin Beta-4 fragment. Lyophilised powder, 5mg vials. Cold-chain shipped.</p>
+    </div>
+    <div class="product-card">
+      <div class="product-tag">Research Chemical</div>
+      <div class="product-name">Semax</div>
+      <div class="product-formula">C37H51N9O10S</div>
+      <p class="product-desc">ACTH(4-7) Pro-Gly-Pro analogue. Nasal spray formulation available. 3mg & 10mg.</p>
+    </div>
+    <div class="product-card">
+      <div class="product-tag">Research Chemical</div>
+      <div class="product-name">Epithalon</div>
+      <div class="product-formula">C14H22N4O9</div>
+      <p class="product-desc">Tetrapeptide Ala-Glu-Asp-Gly. Lyophilised, 10mg vials. ≥98.5% purity by MS analysis.</p>
+    </div>
+    <div class="product-card">
+      <div class="product-tag">Research Chemical</div>
+      <div class="product-name">Selank</div>
+      <div class="product-formula">C33H57N11O9</div>
+      <p class="product-desc">Heptapeptide anxiolytic analogue of tuftsin. 5mg lyophilised. Full panel testing.</p>
+    </div>
+  </div>
+</section>
+
+<section style="background: rgba(0,0,0,0.15);">
+  <div class="section-label">Why Diamond Labs</div>
+  <h2>Built for researchers</h2>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-icon">⬡</div>
+      <div class="why-title">Third-party tested</div>
+      <p class="why-desc">Every batch independently verified by accredited labs. HPLC, MS, and NMR analysis available on request.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">◈</div>
+      <div class="why-title">Transparent CoA</div>
+      <p class="why-desc">Full certificates of analysis accompany every order. No guesswork, no hidden batch data.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">◇</div>
+      <div class="why-title">Cold-chain logistics</div>
+      <p class="why-desc">Temperature-controlled packaging from dispatch to door. Peptide integrity maintained throughout transit.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">◆</div>
+      <div class="why-title">Research support</div>
+      <p class="why-desc">Our scientific team is available to assist with compound selection, reconstitution, and storage protocols.</p>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="section-label">Get Started</div>
+  <h2>Ready to order?</h2>
+  <p class="cta-sub">Access our full catalogue of research chemicals and peptides. Accounts approved within 24 hours.</p>
+  <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+    <a href="#" class="btn-primary">Request Account Access →</a>
+    <a href="#" class="btn-outline">Contact Scientific Team</a>
+  </div>
+</section>
+
+<footer>
+  <div>
+    <div class="footer-logo">DIAMOND LABS</div>
+    <div style="margin-top:0.5rem;">© 2025 Diamond Labs. All rights reserved.</div>
+  </div>
+  <p class="disclaimer">All products are sold strictly for research and laboratory use only. Not for human consumption. Diamond Labs complies with all applicable regulations. By placing an order you confirm you are a qualified researcher.</p>
+</footer>
+
+</body>
+</html>
